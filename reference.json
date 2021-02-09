@@ -1,0 +1,40 @@
+################################################################################
+########################### Reference ##########################################
+################################################################################
+{
+    "name": "name of chip",
+    "creationIndex", "where on the bottom the chip is",
+    "colour": {
+        "r": "float for ammount of red",
+        "g": "float for ammount of green",
+        "b": "float for ammount of blue",
+        "a": "float which is normaly 1.0, i dont know what it does"
+    },
+    "nameColour": {
+        "r": "same as before but for text",
+        "g": "same as before but for text",
+        "b": "same as before but for text",
+        "a": "same as before but for text"
+    },
+    "componentNameList": [
+        "COMPONENTS"
+    ],
+    "savedComponentChips": [
+        {
+            "chipName": "name of chip",
+            "posX": "x coordinate of chip (not useful)",
+            "posY": "y coordinate of chip (not useful)",
+            "inputPins": [
+                {
+                    "name": "name of input pin",
+                    "parentChipIndex": "index in array of chip that is connected to this pin",
+                    "parentChipOutputIndex": "index of pin in chip specified above"
+                    "isCylic": "tells if input to this pin has effect on itself (for example if you direct output of AND gate to one of its inputs)"
+                }
+            ],
+            "outputPins": [
+                NOT DONE
+            ]
+        }
+    ]
+}
