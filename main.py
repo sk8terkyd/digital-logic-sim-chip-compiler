@@ -58,7 +58,7 @@ def create_chip_file(chip_obj, file_name):
 # Notes:        Second argument MUST BE LEFT TO DEFAULT!!!
 #               It is used internally, as a saved version of
 #               original chip argument
-#               Credit to: @bill090
+#               Partial credit to: @bill090
 def create_new_chip(chip, return_chip = None):
     builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
     other_components = []
