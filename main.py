@@ -103,6 +103,8 @@ def create_new_chip(chip, return_chip = None):
     return return_chip
 
 # TESTING
-chip_test = Chip("test.json")
+
+chipFilePath = input("Please enter the path of your chip save file.  ")
+chip_test = Chip(f"{chipFilePath}")
 new_chip = create_new_chip(chip_test)
 print(repr(new_chip))
