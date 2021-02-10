@@ -62,7 +62,6 @@ def create_chip_file(chip_obj, file_name):
 def create_new_chip(chip, return_chip = None):
     builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
     other_components = []
-    other_chip_components = []
 
     # make return_chip return all bulitin components and use recursiveness to get the rest. 
     return_chip = {'name': f'{chip.name}', 'usedParts' : chip.component_name_list, 'chipData': []}
