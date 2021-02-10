@@ -99,7 +99,8 @@ def create_new_chip(chip, return_chip = None):
             return_chip['chipData'].append({'chipName': component['chipName'], 'outputData': inputPinData})
         elif not component['chipName'] in builtin_components:
             return_chip['chipData'].append({'chipName': component['chipName'], 'inputData': inputPinData, 'chipData': [create_new_chip(Chip(f"{component['chipName']}.txt"))]})
-        return_chip['chipData'].append({'chipName': component['chipName'], 'inputData': inputPinData})
+        else:
+            return_chip['chipData'].append({'chipName': component['chipName'], 'inputData': inputPinData})
     return return_chip
 
 # TESTING
