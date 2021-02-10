@@ -61,6 +61,48 @@ def create_chip_file(chip_obj, file_name):
         quit(1)
 
 
+# Definition:   class outputChip
+# Arguments:    return_chip_data, string file_name
+# Purpose:      Object that represents the chip.
+# Notes:        Find a way to make the output look nicer.
+
+
+class outputChip:
+    def __init__(self, return_chip_data):
+        print(return_chip_data)
+        self.data = return_chip_data
+        self.chipNewData = []
+        self.chipsUsed = []
+        self.chipLinks = []
+        for chip in return_chip_data['chipData']:
+            self.chipsUsed.append(chip['chipName'])
+            try:
+                self.chipLinks.append(chip['inputData'])
+            except:
+                try:
+                    self.chipLinks.append(chip['outputData'])
+                except:
+                    self.chipLinks.append(None)
+            if not chip['chipName'] in builtin_components:
+                self.chipNewData.append(chip['chipData'])
+            else:
+                self.chipNewData.append(None)
+    def getReprData(self):
+        self.reprScriptItems = [f"The name of this chip is {self.data['name']}. "]
+        chipCounter = 0
+        for chip in self.chipsUsed:
+            self.reprScriptItems.append(f'This chip is a {chip} chip. It\'s inputs are {self.chipLinks[chipCounter]}.')
+            chipCounter += 1
+        for chipData in self.chipNewData:
+            if chipData != None:
+                self.reprScriptItems.append(''.join(list(str(chipData[0]))))
+        print(self.reprScriptItems)
+        self.reprScript = ''.join(self.reprScriptItems)
+
+    def __repr__(self):
+        self.getReprData()
+        return self.reprScript
+
 # Definition:   function create_new_chip(Chip)
 # Arguments:    Chip chip
 # Purpose:      Recursive function, which resolves any
@@ -80,7 +122,6 @@ def create_new_chip(chip, return_chip = None):
     Returns:
         a "Chip" object that contains only "and" and "not" gates
     """
-    builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
     other_components = []
 
     # make return_chip return all bulitin components and use recursiveness to get the rest. 
@@ -121,10 +162,11 @@ def create_new_chip(chip, return_chip = None):
             return_chip['chipData'].append({'chipName': component['chipName'], 'inputData': inputPinData, 'chipData': [create_new_chip(Chip(f"{component['chipName']}.txt"))]})
         else:
             return_chip['chipData'].append({'chipName': component['chipName'], 'inputData': inputPinData})
-    return return_chip
+    return outputChip(return_chip)
 
 # TESTING
 
+builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
 chipFilePath = input("Please enter the path of your chip save file.  ")
 chip_test = Chip(f"{chipFilePath}")
 new_chip = create_new_chip(chip_test)
