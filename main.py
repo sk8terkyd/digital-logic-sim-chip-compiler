@@ -58,13 +58,15 @@ def create_chip_file(chip_obj, file_name):
 # Notes:        Second argument MUST BE LEFT TO DEFAULT!!!
 #               It is used internally, as a saved version of
 #               original chip argument
+#               Credit to: @bill090
 def create_new_chip(chip, return_chip = None):
     builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
     other_components = []
+    other_chip_components = []
 
-    # if its the first iteration of recursion then return chip = chip
-    if return_chip == None:
-        return_chip = chip
+    # make return_chip return all bulitin components and use recursiveness to get the rest. 
+    return_chip = {'name': f'{chip.name}', 'usedParts' : chip.component_name_list, 'chipData': []}
+
 
     # Check if the chip has other chips inside it
     for component in chip.component_name_list:
@@ -73,17 +75,28 @@ def create_new_chip(chip, return_chip = None):
             other_components.append(component)
             return_chip.component_name_list.remove(component)
 
-    # possibly unnecessary?
-    return_chip.component_name_list = builtin_components
-
     # if our chip is made of only and/not gates, return "return_chip" untouched
-    if other_components == []:
-        return return_chip
 
     # otherwise, recursively try to insert new chips
-    else:
-        pass
-        # TODO: write code that appends new chip to old one.
+
+    for component in other_components:
+        try:
+            other_chip_components.append(create_new_chip(Chip(f"{component}.txt")), return_chip)
+        except:
+            try:
+                other_chip_components.append(create_new_chip(Chip(f"{component}.json")), return_chip)
+            except:
+                other_chip_components.append(f"Could not find {component} input file. Tried both .json and .txt extensions.")
+    
+    for component in chip.components:
+        if component['chipName'] == "SIGNAL IN":
+            return_chip['chipData'].append({'chipName': component['chipName'], 'inputName': component['outputPinNames'][0]})
+        elif component['chipName'] == "SIGNAL OUT":
+            return_chip['chipData'].append({'chipName': component['chipName'], 'outputName': component['inputPins'][0]['name']})
+        elif not component['chipName'] in builtin_components:
+            return_chip['chipData'].append({'chipName': component['chipName'], 'chipData': []})
+        return_chip['chipData'].append({'chipName': component['chipName']})
+    return return_chip
 
 # TESTING
 chip_test = Chip("NAND.txt")
