@@ -79,26 +79,31 @@ def create_new_chip(chip, return_chip = None):
 
     # otherwise, recursively try to insert new chips
 
-    for component in other_components:
-        try:
-            other_chip_components.append(create_new_chip(Chip(f"{component}.txt")), return_chip)
-        except:
-            try:
-                other_chip_components.append(create_new_chip(Chip(f"{component}.json")), return_chip)
-            except:
-                other_chip_components.append(f"Could not find {component} input file. Tried both .json and .txt extensions.")
+    # Alternate code to get non-built-in chip info
+
+    # for component in other_components:
+    #     try:
+    #         other_chip_components.append(create_new_chip(Chip(f"{component}.txt")), return_chip)
+    #     except:
+    #         try:
+    #             other_chip_components.append(create_new_chip(Chip(f"{component}.json")), return_chip)
+    #         except:
+    #             other_chip_components.append(f"Could not find {component} input file. Tried both .json and .txt extensions.")
     
     for component in chip.components:
+        inputPinData = []
+        for inputPin in component['inputPins']:
+            inputPinData.append({"pinName": inputPin['name'], "linkRelativeToSave": (inputPin['parentChipIndex'], inputPin['parentChipOutputIndex'])})
         if component['chipName'] == "SIGNAL IN":
             return_chip['chipData'].append({'chipName': component['chipName'], 'inputName': component['outputPinNames'][0]})
         elif component['chipName'] == "SIGNAL OUT":
-            return_chip['chipData'].append({'chipName': component['chipName'], 'outputName': component['inputPins'][0]['name']})
+            return_chip['chipData'].append({'chipName': component['chipName'], 'outputData': inputPinData})
         elif not component['chipName'] in builtin_components:
-            return_chip['chipData'].append({'chipName': component['chipName'], 'chipData': []})
-        return_chip['chipData'].append({'chipName': component['chipName']})
+            return_chip['chipData'].append({'chipName': component['chipName'], 'inputData': inputPinData, 'chipData': [create_new_chip(Chip(f"{component['chipName']}.txt"))]})
+        return_chip['chipData'].append({'chipName': component['chipName'], 'inputData': inputPinData})
     return return_chip
 
 # TESTING
-chip_test = Chip("NAND.txt")
+chip_test = Chip("test.json")
 new_chip = create_new_chip(chip_test)
 print(repr(new_chip))

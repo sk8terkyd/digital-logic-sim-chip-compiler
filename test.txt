@@ -92,23 +92,23 @@
         },
         {
             "chipName": "NAND",
-            "posX": -0.001
-            "posY":-0.1233
+            "posX": -0.001,
+            "posY":-0.1233,
             "inputPins": [
                 {
-                    "name": "A"
-                    "parentChipIndex": 3
-                    "parentChipOutputIndex":0
+                    "name": "A",
+                    "parentChipIndex": 3,
+                    "parentChipOutputIndex":0,
                     "isCyclic": false
                 },
                 {
-                    "name": "B"
-                    "parentChipIndex": 2
-                    "parentChipOutputIndex":1
+                    "name": "B",
+                    "parentChipIndex": 2,
+                    "parentChipOutputIndex":1,
                     "isCyclic": false
                 }
             ],
-            "outputPinNames: [
+            "outputPinNames": [
                 "OUT"
             ]
         }
