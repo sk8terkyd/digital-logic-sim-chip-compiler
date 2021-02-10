@@ -82,9 +82,10 @@ def create_new_chip(chip, return_chip = None):
 
     # otherwise, recursively try to insert new chips
     else:
+        pass
         # TODO: write code that appends new chip to old one.
 
 # TESTING
-chip_test = Chip("OR.txt")
+chip_test = Chip("NAND.txt")
 new_chip = create_new_chip(chip_test)
 print(repr(new_chip))
