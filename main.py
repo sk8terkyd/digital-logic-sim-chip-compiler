@@ -91,7 +91,7 @@ class outputChip:
         self.reprScriptItems = [f"The name of this chip is {self.data['name']}. "]
         chipCounter = 0
         for chip in self.chipsUsed:
-            self.reprScriptItems.append(f'This chip is a {chip} chip. It\'s inputs are {self.chipLinks[chipCounter]}.')
+            self.reprScriptItems.append(f'This chip is a {chip} chip. It\'s inputs are {self.chipLinks[chipCounter]}. ')
             chipCounter += 1
         for chipData in self.chipNewData:
             if chipData != None:
