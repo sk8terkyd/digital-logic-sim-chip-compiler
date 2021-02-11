@@ -58,7 +58,7 @@ def create_chip_file(chip_obj, file_name):
 # Notes:        Second argument MUST BE LEFT TO DEFAULT!!!
 #               It is used internally, as a saved version of
 #               original chip argument
-def create_new_chip(chip, return_chip = None):
+def create_new_chip(chip, return_chip=None):
     builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
     other_components = []
 
@@ -88,4 +88,4 @@ def create_new_chip(chip, return_chip = None):
 # TESTING
 chip_test = Chip("NAND.txt")
 new_chip = create_new_chip(chip_test)
-print(repr(new_chip))
+print(new_chip)
