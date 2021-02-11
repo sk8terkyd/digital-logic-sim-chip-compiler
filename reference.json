@@ -30,7 +30,8 @@
                 }
             ],
             "outputPinNames: [
-                "PINNAMES"
+                "PINNAME",
+                "PINNAME"
             ]
         }
     ]
