@@ -1,12 +1,3 @@
-################################################################################
-################################## READ ME #####################################
-################################################################################
-"""
-If at any point you are looking at this code and you DONT know what it does OR
-you have a question about it, Tell Me so i can explain better what it does. also
-if you change anything put a comment that you changed it please
-"""
-
 # import json module, for reading save files
 import json
 # import sys module, for command line
@@ -68,7 +59,7 @@ def create_chip_file(chip_obj, file_name):
 # Notes:        Second argument MUST BE LEFT TO DEFAULT!!!
 #               It is used internally, as a saved version of
 #               original chip argument
-def create_new_chip(chip, return_chip = None):
+def create_new_chip(chip, return_chip=None):
     """
     returns a "Chip" object which contains only "and" and "not" gates
     
@@ -102,10 +93,13 @@ def create_new_chip(chip, return_chip = None):
 
     # otherwise, recursively try to insert new chips
     else:
-        pass
+        for other_component in other_components:
+            new_chip = Chip(f"{other_component}.txt")
+            return_chip.components.append(create_new_chip(new_chip, return_chip)
+        return return_chip
         # TODO: write code that appends new chip to old one.
 
 # TESTING
 chip_test = Chip("NAND.txt")
 new_chip = create_new_chip(chip_test)
-print(repr(new_chip))
+print(new_chip)
