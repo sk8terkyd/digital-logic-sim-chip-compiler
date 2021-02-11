@@ -1,12 +1,3 @@
-################################################################################
-################################## READ ME #####################################
-################################################################################
-"""
-If at any point you are looking at this code and you DONT know what it does OR
-you have a question about it, Tell Me so i can explain better what it does. also
-if you change anything put a comment that you changed it please
-"""
-
 # import json module, for reading save files
 import json
 # import sys module, for command line
