@@ -13,6 +13,16 @@ from Chip import Chip
 # Notes:        Find out how to set "creationIndex" value!!!
 #               Also, currently no way to set colour - default is blue.
 def create_chip_file(chip_obj, file_name):
+    """
+    returns nothing.
+    
+    parameters:
+        chip_obj (Chip): chip that contains only and/not gates,
+        file_name (str): the name of the file to be created
+        
+    extra:
+        -currentley no way to choose the color of the chip
+    """
     try:
         create_chip = open(file_name, "w")
         try:
@@ -50,6 +60,16 @@ def create_chip_file(chip_obj, file_name):
 #               It is used internally, as a saved version of
 #               original chip argument
 def create_new_chip(chip, return_chip=None):
+    """
+    returns a "Chip" object which contains only "and" and "not" gates
+    
+    arguments:
+        chip (Chip): used for recursion stuff when calling this function you should pass in the chip you wish to compile,
+        return_chip (Chip): this is ONLY used for recursion, do NOT set this to anything when calling this function
+        
+    Returns:
+        a "Chip" object that contains only "and" and "not" gates
+    """
     builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
     other_components = []
 
