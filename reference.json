@@ -25,7 +25,7 @@
                 {
                     "name": "name of input pin",
                     "parentChipIndex": "index in array of chip that is connected to this pin",
-                    "parentChipOutputIndex": "index of pin in chip specified above"
+                    "parentChipOutputIndex": "index of pin in chip specified above",
                     "isCylic": "tells if input to this pin has effect on itself (for example if you direct output of AND gate to one of its inputs)"
                 }
             ],
