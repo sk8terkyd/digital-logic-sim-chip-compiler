@@ -1,3 +1,8 @@
+################################################################################
+############################ Chip Class ########################################
+################################################################################
+
+
 import json
 
 # Definition:   function read_file(string)
@@ -6,12 +11,6 @@ import json
 #               string with contents
 # Notes:        Couldn't possibly be safer ;)
 def read_file(file_path):
-    """
-    returns the content of the given file path
-    
-    args:
-        "file_path"(string)
-    """
     try:
         file = open(file_path, 'r')
         try:
@@ -32,12 +31,6 @@ def read_file(file_path):
 #               turns it into Python's dictionary type
 # Notes:        Error handling added
 def read_json(json_string):
-    """
-    returns a python dict of a given json string
-    
-    args:
-        "json_string"(string)
-    """
     try:
         return json.loads(json_string)
     except:
@@ -50,9 +43,6 @@ def read_json(json_string):
 # Purpose:      Packs all internals of chip into one neat object
 # Notes:        It seems to be safe (catches all exceptions)
 class Chip:
-    """
-    Chip class is used for "main.py"
-    """
     def __init__(self, file_path):
         # initializing the values that matter to us
         self.path = file_path
