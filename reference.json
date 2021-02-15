@@ -29,8 +29,8 @@
                     "isCylic": "tells if input to this pin has effect on itself (for example if you direct output of AND gate to one of its inputs)"
                 }
             ],
-            "outputPins": [
-                "List of names of the outputs of that chip."
+            "outputPinNames": [
+                "PINNAME"
             ]
         }
     ]
