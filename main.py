@@ -69,7 +69,6 @@ def create_chip_file(chip_obj, file_name):
 
 class outputChip:
     def __init__(self, return_chip_data):
-        print(return_chip_data)
         self.data = return_chip_data
         self.chipNewData = []
         self.chipsUsed = []
@@ -93,10 +92,13 @@ class outputChip:
         for chip in self.chipsUsed:
             self.reprScriptItems.append(f'This chip is a {chip} chip. It\'s inputs are {self.chipLinks[chipCounter]}. ')
             chipCounter += 1
-        for chipData in self.chipNewData:
-            if chipData != None:
-                self.reprScriptItems.append(''.join(list(str(chipData[0]))))
-        print(self.reprScriptItems)
+        for chip in self.chipNewData:
+            noneNew = True
+            if chip != None:
+                if noneNew:
+                    self.reprScriptItems.append("\nThese are chips used in the main chip that are not built-in:")
+                    noneNew = False
+                self.reprScriptItems.append(f"\n{str(chip[0])}")
         self.reprScript = ''.join(self.reprScriptItems)
 
     def __repr__(self):
