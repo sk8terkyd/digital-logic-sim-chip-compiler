@@ -36,31 +36,3 @@ def read_json(json_string):
     except:
         print(f"Could not parse contents of file! Contents: {json_string}")
         quit(1)
-
-
-# Definition:   class Chip(string)
-# Arguments:    string file_path
-# Purpose:      Packs all internals of chip into one neat object
-# Notes:        It seems to be safe (catches all exceptions)
-class Chip:
-    def __init__(self, file_path):
-        # initializing the values that matter to us
-        self.path = file_path
-        try:
-            self.json_text = read_file(self.path)
-        except:
-            print(f"Needed chip file not found! Path to chip file: {file_path}")
-            quit(1)
-        self.dict_with_parts = read_json(self.json_text)
-        # name of chip
-        self.name = self.dict_with_parts["name"]
-        # components that the chip is made of
-        self.component_name_list = self.dict_with_parts["componentNameList"]
-        # actual components section of chip
-        self.components = self.dict_with_parts["savedComponentChips"]
-
-    # returning the important values
-    def __repr__(self):
-        return repr(f"""name: {self.name},""" +
-                    f"""component names: {self.component_name_list},""" +
-                    f"""components: {self.components}""")
