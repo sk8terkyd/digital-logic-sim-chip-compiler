@@ -95,7 +95,7 @@ def create_new_chip(chip, return_chip=None):
     else:
         for other_component in other_components:
             new_chip = Chip(f"{other_component}.txt")
-            return_chip.components.append(create_new_chip(new_chip, return_chip)
+            return_chip.components.append(create_new_chip(new_chip, return_chip))
         return return_chip
         # TODO: write code that appends new chip to old one.
 
