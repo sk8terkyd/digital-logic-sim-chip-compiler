@@ -41,7 +41,7 @@ def create_chip_file(chip_obj, file_name):
                     "b": 1.0,
                     "a": 1.0
                 },
-                "componentNameList": (chip_obj.component_name_list),
+                "componentNameList": (chip_obj.chipComponents),
                 "savedComponentChips": (chip_obj.components)
             }, create_chip, indent = 4)
         except:
@@ -78,28 +78,37 @@ def create_new_chip(chip, return_chip=None):
         return_chip = chip
 
     # Check if the chip has other chips inside it
-    for component in chip.component_name_list:
+    for component in chip.chipComponents:
         if component not in builtin_components:
-            # move component from component_name_list to other_components
+            # move component from chipComponents to other_components
             other_components.append(component)
-            return_chip.component_name_list.remove(component)
+            return_chip.chipComponents.remove(component)
 
     # possibly unnecessary?
-    return_chip.component_name_list = builtin_components
+    return_chip.chipComponents = builtin_components
 
     # if our chip is made of only and/not gates, return "return_chip" untouched
     if other_components == []:
         return return_chip
 
     # otherwise, recursively try to insert new chips
+
+    # TODO: write code that appends new chip to old one.
     else:
-        for other_component in other_components:
-            new_chip = Chip(f"{other_component}.txt")
-            return_chip.components.append(create_new_chip(new_chip, return_chip))
-        return return_chip
-        # TODO: write code that appends new chip to old one.
+        for component in range(len(chip.chipComponents)):
+            if chip.chipComponents[component] in other_components:
+                data = chip.chipComponents[component]
+                componentInputs = data['inputPins']
+                new_chip = create_new_chip(Chip(f"{chip.chipComponents[component]['name']}.txt"))
+                for newComponent in new_chip['chipComponents']:
+                    if newComponent['name'] in ['SIGNAL IN', 'SIGNAL OUT']:
+                        del(newComponent)
+        # for other_component in other_components:
+        #     new_chip = Chip(f"{other_component}.txt")
+        #     return_chip.componentData.append(repr(create_new_chip(new_chip, return_chip)))
+        # return return_chip
 
 # TESTING
-chip_test = Chip("NAND.txt")
+chip_test = Chip("OR.txt")
 new_chip = create_new_chip(chip_test)
-print(new_chip)
+print(json.dumps(repr(new_chip), sort_keys=True, indent=4))
