@@ -2,9 +2,10 @@
 import json
 # import sys module, for command line
 import sys
+# import ast.literal_eval(), for testing and printing the output
+from ast import literal_eval
 # import Chip class
 from Chip import Chip
-
 
 # Definition:   function create_chip_file(Chip, string)
 # Arguments:    Chip chip_obj, string file_name
@@ -109,6 +110,6 @@ def create_new_chip(chip, return_chip=None):
         # return return_chip
 
 # TESTING
-chip_test = Chip("OR.txt")
+chip_test = Chip("NAND.txt")
 new_chip = create_new_chip(chip_test)
-print(json.dumps(repr(new_chip), sort_keys=True, indent=4))
+print(json.dumps(literal_eval(repr(new_chip)), sort_keys=True, indent=4))
