@@ -5,7 +5,7 @@
         "r": "float for ammount of red",
         "g": "float for ammount of green",
         "b": "float for ammount of blue",
-        "a": "float which is normaly 1.0, i dont know what it does"
+        "a": "float for transparence of color"
     },
     "nameColour": {
         "r": "same as before but for text",
