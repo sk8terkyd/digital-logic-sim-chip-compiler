@@ -13,33 +13,41 @@ class Chip:
         
         # Load data
 
-        chipFile = open(file_path)
-        self.chipRawData = json.load(chipFile)
-        chipFile.close()
-
+        try:
+            chipFile = open(file_path)
+            self.chipRawData = json.load(chipFile)
+            chipFile.close()
+        except:
+            print("Your file was not found. Please ensure that it is in the same directory as this project.")
+            quit()
         # Sort data
+        
+        try:
+            self.chipName = self.chipRawData['name']
+            self.chipComponents = self.chipRawData['componentNameList']
 
-        self.chipName = self.chipRawData['name']
-        self.chipComponents = self.chipRawData['componentNameList']
+            # Only keep the important things
 
-        # Only keep the important things
+            self.componentData = []
 
-        self.componentData = []
+            for chipUsed in range(len(self.chipRawData['savedComponentChips'])):
 
-        for chipUsed in range(len(self.chipRawData['savedComponentChips'])):
+                # Get data of all chips used
 
-            # Get data of all chips used
+                chipUsedData = {'name': self.chipRawData['savedComponentChips'][chipUsed]['chipName'], 'inputPins': self.chipRawData['savedComponentChips'][chipUsed]['inputPins'], 'outputPinNames': self.chipRawData['savedComponentChips'][chipUsed]['outputPinNames']}
+                
+                # Add data of the chips that are not built in NOT IMPLEMENTED
+                
+                # if not chipUsedData['name'] in ['SIGNAL IN', 'SIGNAL OUT', 'AND', 'NOT']:
+                #     chipUsedData['componentData'] = repr(Chip(f"{chipUsedData['name']}.txt"))
 
-            chipUsedData = {'name': self.chipRawData['savedComponentChips'][chipUsed]['chipName'], 'inputPins': self.chipRawData['savedComponentChips'][chipUsed]['inputPins'], 'outputPinNames': self.chipRawData['savedComponentChips'][chipUsed]['outputPinNames']}
-            
-            # Add data of the chips that are not built in NOT IMPLEMENTED
-            
-            # if not chipUsedData['name'] in ['SIGNAL IN', 'SIGNAL OUT', 'AND', 'NOT']:
-            #     chipUsedData['componentData'] = repr(Chip(f"{chipUsedData['name']}.txt"))
+                # Add data to components for this Chip
 
-            # Add data to components for this Chip
-
-            self.componentData.append(chipUsedData)
+                self.componentData.append(chipUsedData)
+        
+        except:
+            print("Are you sure this is a Chip save file, in json form? Please check your save file, just in case.")
+            quit()
 
         # Make formal data for Chip
 
