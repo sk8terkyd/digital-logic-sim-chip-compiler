@@ -25,7 +25,7 @@ def create_chip_file(chip_obj, file_name):
         -currentley no way to choose the color of the chip
     """
     try:
-        create_chip = open(file_name, "w")
+        create_chip = open(f"./{file_name}", "w")
         try:
             json.dump({
                 "name": (chip_obj.name),
@@ -49,7 +49,7 @@ def create_chip_file(chip_obj, file_name):
             print(f"Could not dump chip! Printable version: {repr(chip_obj)}")
             quit(1)
     except:
-        print(f"Could not open output file! Requested file: {file_name}")
+        print(f"Could not open output file! Requested file: {file_name}. Be sure to include the file extension.")
         quit(1)
 
 
@@ -57,10 +57,8 @@ def create_chip_file(chip_obj, file_name):
 # Arguments:    Chip chip
 # Purpose:      Recursive function, which resolves any
 #               possible dependencies on chip
-# Notes:        Second argument MUST BE LEFT TO DEFAULT!!!
-#               It is used internally, as a saved version of
-#               original chip argument
-def create_new_chip(chip, return_chip=None):
+# Notes:        Second argument removed.
+def create_new_chip(chip):
     """
     returns a "Chip" object which contains only "and" and "not" gates
     
@@ -73,43 +71,58 @@ def create_new_chip(chip, return_chip=None):
     """
     builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
     other_components = []
-
-    # if its the first iteration of recursion then return chip = chip
-    if return_chip == None:
-        return_chip = chip
+    
+    return_chip = chip
 
     # Check if the chip has other chips inside it
-    for component in chip.chipComponents:
-        if component not in builtin_components:
+
+    for component in return_chip.chipComponents:
+        if not(component in builtin_components):
             # move component from chipComponents to other_components
             other_components.append(component)
             return_chip.chipComponents.remove(component)
-
-    # possibly unnecessary?
-    return_chip.chipComponents = builtin_components
 
     # if our chip is made of only and/not gates, return "return_chip" untouched
     if other_components == []:
         return return_chip
 
-    # otherwise, recursively try to insert new chips
+    # otherwise, recursively try to insert new chips\
 
-    # TODO: write code that appends new chip to old one.
     else:
-        for component in range(len(chip.chipComponents)):
-            if chip.chipComponents[component] in other_components:
-                data = chip.chipComponents[component]
+        for component in range(len(return_chip.componentData)):
+            if chip.componentData[component]['name'] in other_components:
+                data = chip.componentData[component]
                 componentInputs = data['inputPins']
-                new_chip = create_new_chip(Chip(f"{chip.chipComponents[component]['name']}.txt"))
-                for newComponent in new_chip['chipComponents']:
+                new_chip = create_new_chip(Chip(f"{return_chip.componentData[component]['name']}.txt"))
+                for newComponent in new_chip.chipData['componentData']:
+                    for inputPin in newComponent['inputPins']:
+                        if new_chip.chipData['componentData'][inputPin['parentChipIndex']]['name'] == 'SIGNAL IN':
+                            inputPin['parentChipOutputIndex'] = componentInputs[inputPin['parentChipIndex']]['parentChipOutputIndex']
+                            inputPin['parentChipIndex'] = componentInputs[inputPin['parentChipIndex']]['parentChipIndex']
+                        else:
+                            for inputPin in newComponent['inputPins']:
+                                    inputPin['parentChipIndex'] += len(return_chip.chipData['componentData'])
+                firstOut = True
+                for newComponentNum in range(len(new_chip.chipData['componentData'])):
+                    newComponent = new_chip.chipData['componentData'][newComponentNum]
+                    if newComponent['name'] == 'SIGNAL OUT':
+                        if firstOut:
+                            firstOutNum = newComponentNum
+                    for component in return_chip.componentData:
+                        for inputPin in component['inputPins']:
+                            if inputPin['parentChipIndex'] == component and inputPin['parentChipOutputIndex'] == firstOutNum - newComponentNum:
+                                inputPin['parentChipIndex'] = len(chip.componentData) + newComponentNum
+                for newComponent in new_chip.chipData['componentData']:
                     if newComponent['name'] in ['SIGNAL IN', 'SIGNAL OUT']:
                         del(newComponent)
+                return_chip.chipData['componentData'].append(new_chip.chipData['componentData'])
+        return return_chip
         # for other_component in other_components:
         #     new_chip = Chip(f"{other_component}.txt")
         #     return_chip.componentData.append(repr(create_new_chip(new_chip, return_chip)))
         # return return_chip
 
 # TESTING
-chip_test = Chip("NAND.txt")
+chip_test = Chip("OR.txt")
 new_chip = create_new_chip(chip_test)
-print(json.dumps(literal_eval(repr(new_chip)), sort_keys=True, indent=4))
+print(json.dumps(literal_eval(repr(new_chip)), indent=4))
