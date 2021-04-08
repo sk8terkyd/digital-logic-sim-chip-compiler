@@ -4,6 +4,8 @@ import json
 import sys
 # import ast.literal_eval(), for testing and printing the output
 from ast import literal_eval
+# import os, for file existence checking
+import os
 # import Chip class
 from Chip import Chip
 
@@ -13,27 +15,39 @@ from Chip import Chip
 #               equal to file_name.
 # Notes:        Find out how to set "creationIndex" value!!!
 #               Also, currently no way to set colour - default is blue.
-def create_chip_file(chip_obj, file_name):
+def create_chip_file(chip_obj):
     """
     returns nothing.
     
     parameters:
         chip_obj (Chip): chip that contains only and/not gates,
         file_name (str): the name of the file to be created
-        
-    extra:
-        -currentley no way to choose the color of the chip
     """
+    
+    file_name = input("What is the name of the file you wish that your chip save will be exported to? (Please do not use an existing file, as it will not work properly.)    ")
+
+    if os.path.exists(file_name):
+        print("Please use a filepath that does not exist to export your chip save to.")
+        quit()
+
+    print(
+            """
+            Instructions:
+            If numbers are asked for, input them as numbers, not words.
+            If it asks for a number, give a decimal number (e.g. 0-255 in the case of RGB), not a hexadecimal number (e.g. 00-FF) for RGB.
+            """
+        )
+
     try:
-        create_chip = open(f"./{file_name}", "w")
+        create_chip = open(os.path.join("saveFiles", file_name), "w")
         try:
             json.dump({
-                "name": (chip_obj.name),
+                "name": (chip_obj.chipName),
                 "creationIndex": 0,
                 "colour": {
-                    "r": 0.0,
-                    "g": 0.0,
-                    "b": 1.0,
+                    "r": float(input("The R part of the RGB:   "))/255,
+                    "g": float(input("The G part of the RGB:   "))/255,
+                    "b": float(input("The B part of the RGB:   "))/255,
                     "a": 1.0
                 },
                 "nameColour": {
@@ -42,14 +56,14 @@ def create_chip_file(chip_obj, file_name):
                     "b": 1.0,
                     "a": 1.0
                 },
-                "componentNameList": (chip_obj.chipComponents),
-                "savedComponentChips": (chip_obj.components)
+                "componentNameList": chip_obj.chipData['chipComponents'],
+                "savedComponentChips": chip_obj.chipData['componentData']
             }, create_chip, indent = 4)
         except:
-            print(f"Could not dump chip! Printable version: {repr(chip_obj)}")
+            print(f"Could not dump chip! Printable version: {repr(chip_obj)}. This is most likely an internal error. Go to [NOT YET MERGED, ISSUES TAB WILL NOT EXIST] and submit a Issue in the Issues tab.") # If you do fork this, just put the link https://github.com/sk8terkyd/digital-logic-sim-chip-compiler/issues there.
             quit(1)
     except:
-        print(f"Could not open output file! Requested file: {file_name}. Be sure to include the file extension.")
+        print(f"Could not create/open output file! Requested file: {file_name}. Be sure to include the file extension.  This is most likely an internal error. Go to [NOT YET MERGED, ISSUES TAB WILL NOT EXIST] and submit a Issue in the Issues tab.") # If you do fork this, just put the link https://github.com/sk8terkyd/digital-logic-sim-chip-compiler/issues there.")
         quit(1)
 
 
@@ -63,8 +77,7 @@ def create_new_chip(chip):
     returns a "Chip" object which contains only "and" and "not" gates
     
     arguments:
-        chip (Chip): used for recursion stuff when calling this function you should pass in the chip you wish to compile,
-        return_chip (Chip): this is ONLY used for recursion, do NOT set this to anything when calling this function
+        chip (Chip): used for recursion stuff when calling this function you should pass in the chip you wish to compile
         
     Returns:
         a "Chip" object that contains only "and" and "not" gates
@@ -86,14 +99,21 @@ def create_new_chip(chip):
     if other_components == []:
         return return_chip
 
-    # otherwise, recursively try to insert new chips\
+    # otherwise, recursively try to insert new chips
 
     else:
         for component in range(len(return_chip.componentData)):
-            if chip.componentData[component]['name'] in other_components:
-                data = chip.componentData[component]
+            if return_chip.componentData[component]['name'] in other_components:
+                data = return_chip.componentData[component]
                 componentInputs = data['inputPins']
-                new_chip = create_new_chip(Chip(f"{return_chip.componentData[component]['name']}.txt"))
+                try:
+                    new_chip = create_new_chip(Chip(os.path.join("saveFiles", f"{return_chip.componentData[component]['name']}.txt")))
+                except:
+                    try:
+                        new_chip = create_new_chip(Chip(os.path.join("saveFiles", f"{return_chip.componentData[component]['name']}.json")))
+                    except:
+                        print("Be sure that you have all the chip saves in the saveFiles folder of the folder you are running this from.")
+                        quit()
                 for newComponent in new_chip.chipData['componentData']:
                     for inputPin in newComponent['inputPins']:
                         if new_chip.chipData['componentData'][inputPin['parentChipIndex']]['name'] == 'SIGNAL IN':
@@ -115,14 +135,16 @@ def create_new_chip(chip):
                 for newComponent in new_chip.chipData['componentData']:
                     if newComponent['name'] in ['SIGNAL IN', 'SIGNAL OUT']:
                         del(newComponent)
-                return_chip.chipData['componentData'].append(new_chip.chipData['componentData'])
+                for chip in new_chip.chipData['componentData']:
+                    return_chip.chipData['componentData'].append(chip)
+        for chip in return_chip.chipData['componentData']:
+            print(chip)
+            chip['posX'] = 0.0
+            chip['posY'] = 0.0
         return return_chip
-        # for other_component in other_components:
-        #     new_chip = Chip(f"{other_component}.txt")
-        #     return_chip.componentData.append(repr(create_new_chip(new_chip, return_chip)))
-        # return return_chip
 
-# TESTING
-chip_test = Chip("OR.txt")
-new_chip = create_new_chip(chip_test)
-print(json.dumps(literal_eval(repr(new_chip)), indent=4))
+print("Please run this process in the folder that has this code. Otherwise, it may not function properly.")
+originalChip = Chip(input("What is the name of the file you would like to simplify?    "))
+baseChip = create_new_chip(originalChip)
+create_chip_file(baseChip)
+print("Your simplified chip save has been made.")

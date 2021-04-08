@@ -14,7 +14,7 @@ class Chip:
         # Load data
 
         try:
-            chipFile = open(f"{file_path}")
+            chipFile = open(os.path.join("saveFiles", file_name))
             self.chipRawData = json.load(chipFile)
             chipFile.close()
         except:
