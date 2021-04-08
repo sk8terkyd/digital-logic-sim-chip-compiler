@@ -8,64 +8,10 @@ from ast import literal_eval
 import os
 # import Chip class
 from Chip import Chip
-
-# Definition:   function create_chip_file(Chip, string)
-# Arguments:    Chip chip_obj, string file_name
-# Purpose:      Saves Chip object into file with path
-#               equal to file_name.
-# Notes:        Find out how to set "creationIndex" value!!!
-#               Also, currently no way to set colour - default is blue.
-def create_chip_file(chip_obj):
-    """
-    returns nothing.
-    
-    parameters:
-        chip_obj (Chip): chip that contains only and/not gates,
-        file_name (str): the name of the file to be created
-    """
-    
-    file_name = input("What is the name of the file you wish that your chip save will be exported to? (Please do not use an existing file, as it will not work properly.)    ")
-
-    if os.path.exists(file_name):
-        print("Please use a filepath that does not exist to export your chip save to.")
-        quit()
-
-    print(
-            """
-            Instructions:
-            If numbers are asked for, input them as numbers, not words.
-            If it asks for a number, give a decimal number (e.g. 0-255 in the case of RGB), not a hexadecimal number (e.g. 00-FF) for RGB.
-            """
-        )
-
-    try:
-        create_chip = open(os.path.join("saveFiles", file_name), "w")
-        try:
-            json.dump({
-                "name": (chip_obj.chipName),
-                "creationIndex": 0,
-                "colour": {
-                    "r": float(input("The R part of the RGB:   "))/255,
-                    "g": float(input("The G part of the RGB:   "))/255,
-                    "b": float(input("The B part of the RGB:   "))/255,
-                    "a": 1.0
-                },
-                "nameColour": {
-                    "r": 1.0,
-                    "g": 1.0,
-                    "b": 1.0,
-                    "a": 1.0
-                },
-                "componentNameList": chip_obj.chipData['chipComponents'],
-                "savedComponentChips": chip_obj.chipData['componentData']
-            }, create_chip, indent = 4)
-        except:
-            print(f"Could not dump chip! Printable version: {repr(chip_obj)}. This is most likely an internal error. Go to [NOT YET MERGED, ISSUES TAB WILL NOT EXIST] and submit a Issue in the Issues tab.") # If you do fork this, just put the link https://github.com/sk8terkyd/digital-logic-sim-chip-compiler/issues there.
-            quit(1)
-    except:
-        print(f"Could not create/open output file! Requested file: {file_name}. Be sure to include the file extension.  This is most likely an internal error. Go to [NOT YET MERGED, ISSUES TAB WILL NOT EXIST] and submit a Issue in the Issues tab.") # If you do fork this, just put the link https://github.com/sk8terkyd/digital-logic-sim-chip-compiler/issues there.")
-        quit(1)
-
+# import create_chip_file
+from create_file import create_chip_file
+# import get_others
+from get_others import get_others
 
 # Definition:   function create_new_chip(Chip)
 # Arguments:    Chip chip
@@ -82,18 +28,12 @@ def create_new_chip(chip):
     Returns:
         a "Chip" object that contains only "and" and "not" gates
     """
-    builtin_components = ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]
-    other_components = []
     
     return_chip = chip
 
     # Check if the chip has other chips inside it
 
-    for component in return_chip.chipComponents:
-        if not(component in builtin_components):
-            # move component from chipComponents to other_components
-            other_components.append(component)
-            return_chip.chipComponents.remove(component)
+    other_components = get_others(return_chip)
 
     # if our chip is made of only and/not gates, return "return_chip" untouched
     if other_components == []:

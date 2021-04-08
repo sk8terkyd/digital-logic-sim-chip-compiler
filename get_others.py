@@ -14,6 +14,7 @@ def get_others(chip):
 
     for i in chip.component_list:
         if i not in ["AND", "NOT", "SIGNAL IN", "SIGNAL OUT"]:
+            chip.chipComponents.remove(i)
             others.append(i)
 
     return others
