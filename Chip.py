@@ -1,5 +1,5 @@
 import json
-
+import os
 
 class Chip:
     
@@ -14,7 +14,7 @@ class Chip:
         # Load data
 
         try:
-            chipFile = open(os.path.join("saveFiles", file_name))
+            chipFile = open(file_path)
             self.chipRawData = json.load(chipFile)
             chipFile.close()
         except:

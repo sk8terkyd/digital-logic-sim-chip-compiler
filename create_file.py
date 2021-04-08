@@ -1,7 +1,7 @@
 import json
 import os
 
-def create_chip_file(chip_obj):
+def create_chip_file(chip_obj, file_name):
     """
     returns nothing.
     
@@ -10,8 +10,6 @@ def create_chip_file(chip_obj):
         file_name (str): the name of the file to be created
     """
     
-    file_name = input("What is the name of the file you wish that your chip save will be exported to? (Please do not use an existing file, as it will not work properly.)    ")
-
     if os.path.exists(file_name):
         print("Please use a filepath that does not exist to export your chip save to.")
         quit()
@@ -25,7 +23,7 @@ def create_chip_file(chip_obj):
         )
 
     try:
-        create_chip = open(os.path.join("saveFiles", file_name), "w")
+        create_chip = open(file_name, "w")
         try:
             json.dump({
                 "name": (chip_obj.chipName),
