@@ -14,11 +14,11 @@ class Chip:
         # Load data
 
         try:
-            chipFile = open(file_path)
+            chipFile = open(f"{file_path}")
             self.chipRawData = json.load(chipFile)
             chipFile.close()
         except:
-            print("Your file was not found. Please ensure that it is in the same directory as this project.")
+            print("Your file was not found. Please ensure that it is in the same directory as this project, and that you are running this code in the parent directory of this project.")
             quit()
         # Sort data
         
