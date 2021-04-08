@@ -69,3 +69,4 @@ def create_new_chip(chip):
             chip['posX'] = 0.0
             chip['posY'] = 0.0
         return return_chip
+        
