@@ -1,3 +1,5 @@
+#!/bin/python
+
 from get_others import get_others
 from Chip import Chip
 

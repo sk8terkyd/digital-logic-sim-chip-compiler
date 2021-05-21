@@ -1,3 +1,6 @@
+#!/bin/python
+
+# Import json and os for file parsing/code to json and to filepath check.
 import json
 import os
 

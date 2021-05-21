@@ -1,3 +1,5 @@
+#!/bin/python
+
 # import sys module, for command line
 import sys
 # import Chip class

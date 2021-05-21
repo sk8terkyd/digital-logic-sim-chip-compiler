@@ -1,3 +1,5 @@
+#!/bin/python
+
 import json
 import os
 
@@ -29,9 +31,9 @@ def create_chip_file(chip_obj, file_name):
                 "name": (chip_obj.chipName),
                 "creationIndex": 0,
                 "colour": {
-                    "r": float(input("The R part of the RGB:   "))/255,
-                    "g": float(input("The G part of the RGB:   "))/255,
-                    "b": float(input("The B part of the RGB:   "))/255,
+                    "r": float(input("The R part of the RGB:   "))+1/256,
+                    "g": float(input("The G part of the RGB:   "))+1/256,
+                    "b": float(input("The B part of the RGB:   "))+1/256,
                     "a": 1.0
                 },
                 "nameColour": {
